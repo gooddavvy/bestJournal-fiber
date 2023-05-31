@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>BestJournal</title>
+    <title>Register BestJournal</title>
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -18,9 +18,28 @@
   </head>
   <body>
     <div class="container-xxl bd-gutter mt-3 my-md-4 bd-layout text-center">
-        <h1>Welcome to BestJournal!</h1>
-        <p>BestJournal is is an <b>amazing</b> and <b>blazing fast</b> journal application with neat structure</p>
-        <p>It consists of a maximum of 365 total journal pages, a journal for <b>one whole year!</b></p>
+        <h1>Register</h1>
+        <br />
+        <label for="fullName">Full Name: </label>
+        <input id="fullName" type="text" required />
+        <br />
+        <br />
+        <label for="PIN">PIN: </label>
+        <input
+            id="PIN"
+            type="number"
+            placeholder="We'll try to keep it as secure as possible"
+            title="We'll try to keep it as secure as possible"
+            required
+        />
+        <br />
+        <br />
+        <input type="checkbox" id="checkbox" />
+        <span>
+            I agree to the following quote: "This is not a scammy, spammy, or shady site. The PIN is always as secure as possible, and on every browser."
+        </span>
+        <br />
+        <br />
         <button type="button" class="btn btn-primary">Register</button>
     </div>
 
@@ -44,7 +63,27 @@
         </div>
     </footer>
 
-    <script src="js/year.js"></script>
+    <script>
+        let fullName = document.getElementById("fullName").value;
+        let PIN = document.getElementById("PIN").value;
+
+        let checkbox = document.getElementById("checkbox");
+        let btn = document.querySelector("button");
+
+        let container = document.querySelector(".text-center")
+
+        btn.onclick = function () {
+            if (fullName !== "" && PIN !== "" && checkbox.checked) {
+                thePin = PIN;
+                container.innerHTML = `
+                    <h1>Register</h1>
+                `;
+            } else {
+                alert("Please fill in the entire form, and agree to the quote.")
+            }
+        }
+    </script>
+
     <script src="js/utils.js"></script>
   </body>
 </html>
