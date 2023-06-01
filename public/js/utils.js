@@ -1,5 +1,5 @@
-console.log(`   Interested in contributing?
-    Go to https://github.com/gooddavvy/bestJournal-fiber/CONTRIBUTE.md.
+console.log(`    Interested in contributing?
+    Go to https://github.com/gooddavvy/bestJournal-fiber/blob/main/CONTRIBUTE.md.
     THIS IS NOT A SCAM!!1
 `);
 

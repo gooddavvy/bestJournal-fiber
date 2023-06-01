@@ -33,7 +33,7 @@ let app = document.getElementById("App");
                                 <h5 class="card-title">${title}</h5>
                                 <h6 class="card-subtitle mb-2 text-body-secondary">Date: <b>${date}</b></h6>
                                 <p class="card-text">${shortDesc}</p>
-                                <a href="${link}" class="btn btn-primary">Open</a>
+                                <a href="${link}" class="card-link">Open >></a>
                             </div>
                         </div>
                     `;
@@ -44,7 +44,7 @@ let app = document.getElementById("App");
             app.innerHTML = `
                 <h1>All caught up!</h1>
                 <p>You don't have any journal pages yet.</p>
-                <button type="button" class="btn btn-primary">Go make one!</button>
+                <a href="/new" class="btn btn-primary">Go make one!</button>
             `;
         }
     } catch (err) {
