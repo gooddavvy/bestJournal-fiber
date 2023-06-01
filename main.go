@@ -1,18 +1,24 @@
 package main
 
 import (
-	"os"
+	// "fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gooddavvy/bestJournal-fiber/handlers"
+	envViper "github.com/gooddavvy/bestJournal-fiber/env"
+	handlers "github.com/gooddavvy/bestJournal-fiber/handlers"
 )
 
 var (
-	port = os.Getenv("PORT")
+	port string
 	app  = fiber.New()
 )
 
 func main() {
+	// Convert port to string and enable envViber configuration
+	envViper.Config(false)
+	envViper.Load()
+	port = envViper.Atos("PORT")
+
 	// API routes
 	app.Get("/api/journalPages/:id", handlers.JournalPagesAPI)
 	app.Get("/api/*", handlers.MainAPI)

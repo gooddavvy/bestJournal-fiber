@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
   <head>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Register BestJournal</title>
@@ -30,6 +33,7 @@
             type="number"
             placeholder="We'll try to keep it as secure as possible"
             title="We'll try to keep it as secure as possible"
+            value="0000"
             required
         />
         <br />
@@ -70,16 +74,64 @@
         let checkbox = document.getElementById("checkbox");
         let btn = document.querySelector("button");
 
-        let container = document.querySelector(".text-center")
+        let container = document.querySelector(".text-center");
 
         btn.onclick = function () {
-            if (fullName !== "" && PIN !== "" && checkbox.checked) {
+            if (checkbox.checked) {
                 thePin = PIN;
+                localStorage.setItem("thePin", thePin);
                 container.innerHTML = `
                     <h1>Register</h1>
+                    <p>Please wait...</p>
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 `;
-            } else {
-                alert("Please fill in the entire form, and agree to the quote.")
+                setTimeout(() => {
+                    (async () => {
+                        try {
+                            let response = await fetch(`/api/register?fullName=${fullName}&PIN=${PIN}`, {
+                                method: "GET",
+                                cache: "no-store",
+                            });
+
+                            if (!response.ok) {
+                                throw new Error("Error: " + response.status);
+                            }
+
+                            let contentType = response.headers.get('content-type');
+                            if (contentType && contentType.includes('application/json')) {
+                                let data = await response.json();
+                                console.log(data);
+                                // Process the data
+                                registration = data;
+                                thePin = PIN;
+                            } else {
+                                throw new Error("Invalid response format: " + contentType);
+                            }
+
+                            // Tell the user the registration was successful and close the page 
+                            container.innerHTML = `
+                                <h1>Registration successful</h1>
+                                <p>Page will close shortly...</p>
+                            `;
+                            window.close();
+                        }
+                        catch (err) {
+                            throw err;
+                            console.log(registration);
+                            container.innerHTML = `
+                                <h1>Registration unsuccessful</h1>
+                                <p>An error occurred during registration:</p>
+                                <p style="color: red"><code>${err}</code></p>
+                                <button type="button" class="btn btn-primary" onclick="location.reload()">Try Again</button>
+                            `;
+                        }
+                    })();
+                }, 5000);
+            }
+            else {
+                alert("Please agree to the quote, and be sure to fill in the entire form.")
             }
         }
     </script>
