@@ -22,3 +22,7 @@ go.work
 
 # Environemt variables file
 .env
+
+# Extra git ignorations
+
+json

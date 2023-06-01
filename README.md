@@ -12,13 +12,19 @@ All you need to do is to make sure you have GoLang installed on your machine, cl
 PORT="8080"
 ```
 
-Also, Add an environment variable with a key of `REGISTER_KEY` and a value of an empty string:
+Also, add an environment variable with a key of `REGISTER_KEY` and a value of an empty string:
 
 ```env
 REGISTER_KEY=""
 ```
 
-After doing that, you can run the following command in the terminal:
+Next, create a folder called `json`, then create a file within it called `pages.json` with the following content:
+
+```json
+[]
+```
+
+After doing all of that, you can run the following command in the terminal:
 
 ```shell
 $ go run .
@@ -28,7 +34,7 @@ $ go run .
     │       (bound on host 0.0.0.0 and port 8080)       │
     │                                                   │
     │ Handlers ............. 5  Processes ........... 1 │
-    │ Prefork ....... Disabled  PID ............. 22036 │
+    │ Prefork ....... Disabled  PID ............. 26772 │
     └───────────────────────────────────────────────────┘
 ```
 

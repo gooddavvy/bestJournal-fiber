@@ -2,6 +2,7 @@ package handlers
 
 import (
 	// "fmt"
+	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	envViper "github.com/gooddavvy/bestJournal-fiber/env"
+	otherFs "github.com/gooddavvy/bestJournal-fiber/fs"
 )
 
 func RegisterAPI(c *fiber.Ctx) error {
@@ -50,10 +52,29 @@ func RegisterAPI(c *fiber.Ctx) error {
 }
 
 func JournalPagesAPI(c *fiber.Ctx) error {
-	apiParam := c.Params("*")
-	if apiParam == "journalPages" {
+	journalPages, err := otherFs.GetJson()
+
+	if err != nil {
+		fmt.Println("Error:", err) // Add this line for debugging
+		return err
 	}
-	return nil
+
+	// Set the required content type
+	c.Context().SetContentType("application/json")
+
+	// Disable caching by setting appropriate cache control headers
+	c.Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+	c.Set("Pragma", "no-cache")
+	c.Set("Expires", "0")
+
+	// Check if journalPages is empty
+	if len(journalPages) == 0 {
+		// Return empty array response
+		return c.SendString("[]")
+	}
+
+	// Return the JSON response
+	return c.JSON(journalPages)
 }
 
 // This is called the Main API. Don't worry, you'll see what it does.

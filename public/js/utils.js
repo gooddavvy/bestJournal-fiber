@@ -1,3 +1,8 @@
+console.log(`   Interested in contributing?
+    Go to https://github.com/gooddavvy/bestJournal-fiber/CONTRIBUTE.md.
+    THIS IS NOT A SCAM!!1
+`);
+
 // get and set year
 let yearElement = document.getElementById("yearSpan");
 let currentYear = new Date().getFullYear();
