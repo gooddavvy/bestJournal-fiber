@@ -7,7 +7,7 @@ console.log(`    Interested in contributing?
 let yearElement = document.getElementById("yearSpan");
 let currentYear = new Date().getFullYear();
 
-yearElement.textContent = currentYear;
+try { yearElement.textContent = currentYear; } catch { }
 
 // set the initial PIN and registration
 let thePin = "0000";

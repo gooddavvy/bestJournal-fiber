@@ -7,11 +7,11 @@ import (
 	envViper "github.com/gooddavvy/bestJournal-fiber/env"
 	otherFs "github.com/gooddavvy/bestJournal-fiber/fs"
 	handlers "github.com/gooddavvy/bestJournal-fiber/handlers"
+	vars "github.com/gooddavvy/bestJournal-fiber/var"
 )
 
 var (
-	port string
-	app  = fiber.New()
+	app = fiber.New()
 )
 
 func main() {
@@ -24,7 +24,7 @@ func main() {
 	// Convert port to string and enable envViber configuration
 	envViper.Config(false)
 	envViper.Load()
-	port = envViper.Atos("PORT")
+	vars.Port = envViper.Atos("PORT")
 
 	// API routes
 	app.Get("/api/journalPages", handlers.JournalPagesAPI)
@@ -32,5 +32,5 @@ func main() {
 
 	// Creating a static logical code and listening to server
 	app.Static("/", "./public")
-	app.Listen(":" + port)
+	app.Listen(":" + vars.Port)
 }

@@ -1,7 +1,6 @@
 let app = document.getElementById("App");
 
 // Fetch and render the journal pages
-// Fetch and render the journal pages
 (async () => {
     try {
         // Fetch the journal pages
@@ -44,7 +43,7 @@ let app = document.getElementById("App");
             app.innerHTML = `
                 <h1>All caught up!</h1>
                 <p>You don't have any journal pages yet.</p>
-                <a href="/new" class="btn btn-primary">Go make one!</button>
+                <a href="/new.html" class="btn btn-primary">Go make one!</button>
             `;
         }
     } catch (err) {

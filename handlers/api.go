@@ -1,8 +1,10 @@
 package handlers
 
 import (
-	// "fmt"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"os"
 	"strconv"
 	"time"
@@ -12,7 +14,19 @@ import (
 	"github.com/gofiber/fiber/v2"
 	envViper "github.com/gooddavvy/bestJournal-fiber/env"
 	otherFs "github.com/gooddavvy/bestJournal-fiber/fs"
+	"github.com/gooddavvy/bestJournal-fiber/model"
+	vars "github.com/gooddavvy/bestJournal-fiber/var"
 )
+
+var journalPages, err = otherFs.GetJson()
+
+func checkForErr() error {
+	if err != nil {
+		fmt.Println("Error:", err) // Add this line for debugging
+		return err
+	}
+	return nil
+}
 
 func RegisterAPI(c *fiber.Ctx) error {
 	fullName := c.Query("fullName")
@@ -52,12 +66,7 @@ func RegisterAPI(c *fiber.Ctx) error {
 }
 
 func JournalPagesAPI(c *fiber.Ctx) error {
-	journalPages, err := otherFs.GetJson()
-
-	if err != nil {
-		fmt.Println("Error:", err) // Add this line for debugging
-		return err
-	}
+	fmt.Println(checkForErr())
 
 	// Set the required content type
 	c.Context().SetContentType("application/json")
@@ -77,6 +86,45 @@ func JournalPagesAPI(c *fiber.Ctx) error {
 	return c.JSON(journalPages)
 }
 
+func AddPageAPI(c *fiber.Ctx) error {
+	anyError := checkForErr()
+	if anyError != nil {
+		fmt.Println(anyError)
+		return anyError
+	}
+
+	// page data
+	pageId := len(journalPages)
+	pageIdStr := strconv.Itoa(pageId)
+	pageData := model.JournalPage{
+		Title:     c.Query("title"),
+		Date:      time.Now().Format("2006-01-02"),
+		ShortDesc: c.Query("desc"),
+		Link:      "https://localhost:" + vars.Port + "/journalPage/" + pageIdStr,
+	}
+
+	// add page data to journal pages
+	journalPages = append(journalPages, pageData)
+
+	// Convert the struct slice to a JSON-encoded byte array
+	var jsonData []byte
+	jsonData, err = json.Marshal(journalPages)
+	if err != nil {
+		c.Status(http.StatusInternalServerError).SendString("Failed to marshal JSON data")
+		return err
+	}
+
+	// Write the JSON data to the file
+	err = ioutil.WriteFile("json/pages.json", jsonData, 0644)
+	if err != nil {
+		c.Status(http.StatusInternalServerError).SendString("Failed to write JSON data to file")
+		return err
+	}
+
+	// return response from server
+	return c.Status(http.StatusOK).SendString("{\"message\": \"Successfully added journal page!\"}")
+}
+
 // This is called the Main API. Don't worry, you'll see what it does.
 func MainAPI(c *fiber.Ctx) error {
 	apiParam := c.Params("*")
@@ -85,6 +133,8 @@ func MainAPI(c *fiber.Ctx) error {
 
 	if apiParam == "register" {
 		return RegisterAPI(c)
+	} else if apiParam == "addPage" {
+		return AddPageAPI(c)
 	}
 	return nil
 }
